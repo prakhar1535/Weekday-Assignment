@@ -19,6 +19,46 @@ const FilterSection = (): JSX.Element => {
   const uniqueJobRoles = Array.from(
     new Set(state.jobs.data.jdList.map((item) => item.jobRole))
   );
+  const uniqueJobExperience = Array.from(
+    new Set(
+      state.jobs.data.jdList
+        .map((item) => item.minExp)
+        .filter((exp) => exp !== null)
+    )
+  ).sort((a, b) => a - b);
+  const uniqueJobLocations = Array.from(
+    new Set(state.jobs.data.jdList.map((item) => item.location))
+  );
+  const uniqueJobMinBasePay = Array.from(
+    new Set(
+      state.jobs.data.jdList
+        .map((item) => item.minJdSalary)
+        .filter((exp) => exp !== null)
+    )
+  ).sort((a, b) => a - b);
+
+  // Define the range size
+  const rangeSize = 10;
+
+  // Create ranges based on the unique minimum base pay values
+  const ranges: string[] = [];
+  let currentRangeStart: number | null = null;
+  let currentRangeEnd: number | null = null;
+  uniqueJobMinBasePay.forEach((value) => {
+    const rangeStart = Math.floor(value / rangeSize) * rangeSize;
+    const rangeEnd = rangeStart + rangeSize;
+    if (currentRangeStart === null || rangeStart > currentRangeEnd) {
+      // Start a new range
+      currentRangeStart = rangeStart;
+      currentRangeEnd = rangeEnd;
+      ranges.push(`${currentRangeStart}-${currentRangeEnd}`);
+    } else {
+      // Extend the current range
+      currentRangeEnd = rangeEnd;
+      ranges[ranges.length - 1] = `${currentRangeStart}-${currentRangeEnd}`;
+    }
+  });
+
   return (
     <>
       <Box
@@ -128,7 +168,7 @@ const FilterSection = (): JSX.Element => {
             </Typography>
           </Box>
         </FilterBox>
-        <FilterBox heading="Roles">
+        <FilterBox heading="Experience">
           <Box
             display={"flex"}
             flexDirection={"column"}
@@ -140,7 +180,7 @@ const FilterSection = (): JSX.Element => {
               },
             }}
           >
-            {uniqueJobRoles.map((role, index) => (
+            {uniqueJobExperience.map((exp, index) => (
               <Typography
                 key={index}
                 padding={"8px"}
@@ -154,7 +194,38 @@ const FilterSection = (): JSX.Element => {
                   },
                 }}
               >
-                {role}
+                {exp}
+              </Typography>
+            ))}
+          </Box>
+        </FilterBox>
+        <FilterBox heading="Loaction">
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            borderRadius={"6px"}
+            gap={"10px"}
+            sx={{
+              "& :hover": {
+                backgroundColor: theme.colorConstants.bgLightBlue,
+              },
+            }}
+          >
+            {uniqueJobLocations.map((location, index) => (
+              <Typography
+                key={index}
+                padding={"8px"}
+                sx={{
+                  cursor: "pointer",
+                  color: theme.colorConstants.mediumGray,
+                  fontSize: "18px",
+                  fontWeight: "400",
+                  "& :hover": {
+                    backgroundColor: theme.colorConstants.bgLightBlue,
+                  },
+                }}
+              >
+                {location}
               </Typography>
             ))}
           </Box>
@@ -171,7 +242,7 @@ const FilterSection = (): JSX.Element => {
               },
             }}
           >
-            {uniqueJobRoles.map((role, index) => (
+            {ranges.map((range, index) => (
               <Typography
                 key={index}
                 padding={"8px"}
@@ -185,38 +256,7 @@ const FilterSection = (): JSX.Element => {
                   },
                 }}
               >
-                {role}
-              </Typography>
-            ))}
-          </Box>
-        </FilterBox>
-        <FilterBox heading="Roles">
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            borderRadius={"6px"}
-            gap={"10px"}
-            sx={{
-              "& :hover": {
-                backgroundColor: theme.colorConstants.bgLightBlue,
-              },
-            }}
-          >
-            {uniqueJobRoles.map((role, index) => (
-              <Typography
-                key={index}
-                padding={"8px"}
-                sx={{
-                  cursor: "pointer",
-                  color: theme.colorConstants.mediumGray,
-                  fontSize: "18px",
-                  fontWeight: "400",
-                  "& :hover": {
-                    backgroundColor: theme.colorConstants.bgLightBlue,
-                  },
-                }}
-              >
-                {role}
+                {range}
               </Typography>
             ))}
           </Box>
