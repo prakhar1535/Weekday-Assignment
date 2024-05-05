@@ -16,6 +16,7 @@ const FilterBox: React.FC<Props> = ({ heading, children }): JSX.Element => {
         padding={"12px"}
         borderRadius={"6px"}
         gap={"4px"}
+        height={"fit-content"}
         position={"relative"}
         sx={{
           border: `1px solid ${theme.colorConstants.borderedGray ?? ""}`,
@@ -24,6 +25,7 @@ const FilterBox: React.FC<Props> = ({ heading, children }): JSX.Element => {
         <Box
           onClick={() => setOpenDrop(!openDrop)}
           sx={{
+            alignItems: "center",
             cursor: "pointer",
             display: "flex",
             flexDirection: "row",
@@ -33,6 +35,8 @@ const FilterBox: React.FC<Props> = ({ heading, children }): JSX.Element => {
         >
           <Typography
             sx={{
+              minWidth: "100px",
+              paddingRight: "10px",
               width: "98%",
               borderRight: `1px solid ${
                 theme.colorConstants.borderedGray ?? ""
@@ -56,9 +60,7 @@ const FilterBox: React.FC<Props> = ({ heading, children }): JSX.Element => {
             />
           </Box>
         </Box>
-        <Box bottom={"-50px"} display={openDrop ? "block" : "none"}>
-          {children}
-        </Box>
+        <Box display={openDrop ? "block" : "none"}>{children}</Box>
       </Box>
     </>
   );

@@ -1,7 +1,11 @@
-import FilterBox from "../components/FilterBox";
+import FilterSection from "./FilterSection";
 
 const JobPage = (): JSX.Element => {
-  return <div></div>;
+  return (
+    <div>
+      <FilterSection />
+    </div>
+  );
 };
 
 export default JobPage;
