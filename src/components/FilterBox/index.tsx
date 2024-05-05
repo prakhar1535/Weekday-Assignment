@@ -16,6 +16,7 @@ const FilterBox: React.FC<Props> = ({ heading, children }): JSX.Element => {
         padding={"12px"}
         borderRadius={"6px"}
         gap={"4px"}
+        minWidth={"250px"}
         height={"fit-content"}
         position={"relative"}
         sx={{

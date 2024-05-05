@@ -17,45 +17,43 @@ const FilterSection = (): JSX.Element => {
     return <>Real thing takes time to load...</>;
   }
   const uniqueJobRoles = Array.from(
-    new Set(state.jobs.data.jdList.map((item) => item.jobRole))
+    new Set(state.jobs.data?.jdList?.map((item) => item.jobRole))
   );
   const uniqueJobExperience = Array.from(
     new Set(
-      state.jobs.data.jdList
+      state.jobs.data?.jdList
         .map((item) => item.minExp)
         .filter((exp) => exp !== null)
     )
   ).sort((a, b) => a - b);
   const uniqueJobLocations = Array.from(
-    new Set(state.jobs.data.jdList.map((item) => item.location))
+    new Set(state.jobs.data?.jdList.map((item) => item.location))
   );
   const uniqueJobMinBasePay = Array.from(
     new Set(
-      state.jobs.data.jdList
+      state.jobs.data?.jdList
         .map((item) => item.minJdSalary)
         .filter((exp) => exp !== null)
     )
-  ).sort((a, b) => a - b);
-
-  // Define the range size
+  ).sort((a, b) => (a as number) - (b as number));
   const rangeSize = 10;
-
-  // Create ranges based on the unique minimum base pay values
   const ranges: string[] = [];
   let currentRangeStart: number | null = null;
   let currentRangeEnd: number | null = null;
   uniqueJobMinBasePay.forEach((value) => {
-    const rangeStart = Math.floor(value / rangeSize) * rangeSize;
-    const rangeEnd = rangeStart + rangeSize;
-    if (currentRangeStart === null || rangeStart > currentRangeEnd) {
-      // Start a new range
-      currentRangeStart = rangeStart;
-      currentRangeEnd = rangeEnd;
-      ranges.push(`${currentRangeStart}-${currentRangeEnd}`);
-    } else {
-      // Extend the current range
-      currentRangeEnd = rangeEnd;
-      ranges[ranges.length - 1] = `${currentRangeStart}-${currentRangeEnd}`;
+    if (value !== null) {
+      const rangeStart = Math.floor(value / rangeSize) * rangeSize;
+      const rangeEnd = rangeStart + rangeSize;
+      if (currentRangeStart === null || rangeStart > currentRangeEnd!) {
+        // Start a new range
+        currentRangeStart = rangeStart;
+        currentRangeEnd = rangeEnd;
+        ranges.push(`${currentRangeStart}-${currentRangeEnd}`);
+      } else {
+        // Extend the current range
+        currentRangeEnd = rangeEnd;
+        ranges[ranges.length - 1] = `${currentRangeStart}-${currentRangeEnd}`;
+      }
     }
   });
 
@@ -65,6 +63,8 @@ const FilterSection = (): JSX.Element => {
         sx={{
           display: "flex",
           gap: "10px",
+          width: "100%",
+          overflowX: { md: "unset", xs: "scroll" },
         }}
       >
         <FilterBox heading="Roles">
@@ -230,7 +230,7 @@ const FilterSection = (): JSX.Element => {
             ))}
           </Box>
         </FilterBox>
-        <FilterBox heading="Roles">
+        <FilterBox heading="Minimun Base Pay Salary">
           <Box
             display={"flex"}
             flexDirection={"column"}
