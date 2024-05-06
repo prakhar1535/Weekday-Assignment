@@ -1,3 +1,5 @@
+import { JobFilter } from "../slice/jobData";
+
 export interface JobState {
   data: {
     jdList: [
@@ -19,4 +21,5 @@ export interface JobState {
     totalCount: number;
   };
   isLoading: boolean;
+  filters: JobFilter[];
 }

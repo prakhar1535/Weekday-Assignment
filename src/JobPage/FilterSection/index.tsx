@@ -3,11 +3,17 @@ import { useEffect } from "react";
 import FilterBox from "../../components/FilterBox";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
-import { fetchJobData } from "../../store/slice/jobData";
+import {
+  fetchJobData,
+  setExperienceFilter,
+  setLocationFilter,
+} from "../../store/slice/jobData";
+import { setJobRolesFilter } from "../../store/slice/jobData";
 import theme from "../../Theme";
 
 const FilterSection = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
+
   const state = useSelector((state: RootState) => state);
   useEffect(() => {
     void dispatch(fetchJobData());
@@ -45,43 +51,94 @@ const FilterSection = (): JSX.Element => {
       const rangeStart = Math.floor(value / rangeSize) * rangeSize;
       const rangeEnd = rangeStart + rangeSize;
       if (currentRangeStart === null || rangeStart > currentRangeEnd!) {
-        // Start a new range
         currentRangeStart = rangeStart;
         currentRangeEnd = rangeEnd;
         ranges.push(`${currentRangeStart}-${currentRangeEnd}`);
       } else {
-        // Extend the current range
         currentRangeEnd = rangeEnd;
         ranges[ranges.length - 1] = `${currentRangeStart}-${currentRangeEnd}`;
       }
     }
   });
 
+  const handleRoleClick = (role: string) => {
+    dispatch(setJobRolesFilter({ type: "role", value: role }));
+  };
+
+  const handleExperienceClick = (exp: number) => {
+    dispatch(setExperienceFilter({ type: "experience", value: exp }));
+  };
+
+  const handleLocationClick = (location: string) => {
+    dispatch(setLocationFilter({ type: "location", value: location }));
+  };
+
+  // const handleSalaryClick = (salary: number) => {
+  //   dispatch(setSalaryFilter({ type: "salary", value: salary }));
+  // };
+
   return (
     <>
       <Box
         sx={{
           display: "flex",
-          gap: "10px",
-          width: "100%",
-          overflowX: { md: "unset", xs: "scroll" },
+          flexDirection: "column",
+          gap: "20px",
         }}
       >
-        <FilterBox heading="Roles">
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            borderRadius={"6px"}
-            gap={"10px"}
-            sx={{
-              "& :hover": {
-                backgroundColor: theme.colorConstants.bgLightBlue,
-              },
-            }}
-          >
-            {uniqueJobRoles.map((role, index) => (
+        <Box
+          sx={{
+            display: "flex",
+            gap: "10px",
+            width: "100%",
+            overflowX: { md: "unset", xs: "scroll" },
+          }}
+        >
+          <FilterBox heading="Roles">
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              borderRadius={"6px"}
+              gap={"10px"}
+              sx={{
+                "& :hover": {
+                  backgroundColor: theme.colorConstants.bgLightBlue,
+                },
+              }}
+            >
+              {uniqueJobRoles.map((role, index) => (
+                <Typography
+                  onClick={() => handleRoleClick(role)}
+                  key={index}
+                  padding={"8px"}
+                  sx={{
+                    cursor: "pointer",
+                    color: theme.colorConstants.mediumGray,
+                    fontSize: "18px",
+                    fontWeight: "400",
+                    "& :hover": {
+                      backgroundColor: theme.colorConstants.bgLightBlue,
+                    },
+                  }}
+                >
+                  {role}
+                </Typography>
+              ))}
+            </Box>
+          </FilterBox>
+          <FilterBox heading="Number of Employees">
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              borderRadius={"6px"}
+              gap={"10px"}
+              sx={{
+                "& :hover": {
+                  backgroundColor: theme.colorConstants.bgLightBlue,
+                },
+              }}
+            >
               <Typography
-                key={index}
                 padding={"8px"}
                 sx={{
                   cursor: "pointer",
@@ -93,96 +150,9 @@ const FilterSection = (): JSX.Element => {
                   },
                 }}
               >
-                {role}
+                {"less than <5"}
               </Typography>
-            ))}
-          </Box>
-        </FilterBox>
-        <FilterBox heading="Number of Employees">
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            borderRadius={"6px"}
-            gap={"10px"}
-            sx={{
-              "& :hover": {
-                backgroundColor: theme.colorConstants.bgLightBlue,
-              },
-            }}
-          >
-            <Typography
-              padding={"8px"}
-              sx={{
-                cursor: "pointer",
-                color: theme.colorConstants.mediumGray,
-                fontSize: "18px",
-                fontWeight: "400",
-                "& :hover": {
-                  backgroundColor: theme.colorConstants.bgLightBlue,
-                },
-              }}
-            >
-              {"less than <5"}
-            </Typography>
-            <Typography
-              padding={"8px"}
-              sx={{
-                cursor: "pointer",
-                color: theme.colorConstants.mediumGray,
-                fontSize: "18px",
-                fontWeight: "400",
-                "& :hover": {
-                  backgroundColor: theme.colorConstants.bgLightBlue,
-                },
-              }}
-            >
-              {"less than <20"}
-            </Typography>
-            <Typography
-              padding={"8px"}
-              sx={{
-                cursor: "pointer",
-                color: theme.colorConstants.mediumGray,
-                fontSize: "18px",
-                fontWeight: "400",
-                "& :hover": {
-                  backgroundColor: theme.colorConstants.bgLightBlue,
-                },
-              }}
-            >
-              {"less than <100"}
-            </Typography>
-            <Typography
-              padding={"8px"}
-              sx={{
-                cursor: "pointer",
-                color: theme.colorConstants.mediumGray,
-                fontSize: "18px",
-                fontWeight: "400",
-                "& :hover": {
-                  backgroundColor: theme.colorConstants.bgLightBlue,
-                },
-              }}
-            >
-              {"greater than >100"}
-            </Typography>
-          </Box>
-        </FilterBox>
-        <FilterBox heading="Experience">
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            borderRadius={"6px"}
-            gap={"10px"}
-            sx={{
-              "& :hover": {
-                backgroundColor: theme.colorConstants.bgLightBlue,
-              },
-            }}
-          >
-            {uniqueJobExperience.map((exp, index) => (
               <Typography
-                key={index}
                 padding={"8px"}
                 sx={{
                   cursor: "pointer",
@@ -194,26 +164,9 @@ const FilterSection = (): JSX.Element => {
                   },
                 }}
               >
-                {exp}
+                {"less than <20"}
               </Typography>
-            ))}
-          </Box>
-        </FilterBox>
-        <FilterBox heading="Loaction">
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            borderRadius={"6px"}
-            gap={"10px"}
-            sx={{
-              "& :hover": {
-                backgroundColor: theme.colorConstants.bgLightBlue,
-              },
-            }}
-          >
-            {uniqueJobLocations.map((location, index) => (
               <Typography
-                key={index}
                 padding={"8px"}
                 sx={{
                   cursor: "pointer",
@@ -225,26 +178,9 @@ const FilterSection = (): JSX.Element => {
                   },
                 }}
               >
-                {location}
+                {"less than <100"}
               </Typography>
-            ))}
-          </Box>
-        </FilterBox>
-        <FilterBox heading="Minimun Base Pay Salary">
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            borderRadius={"6px"}
-            gap={"10px"}
-            sx={{
-              "& :hover": {
-                backgroundColor: theme.colorConstants.bgLightBlue,
-              },
-            }}
-          >
-            {ranges.map((range, index) => (
               <Typography
-                key={index}
                 padding={"8px"}
                 sx={{
                   cursor: "pointer",
@@ -256,11 +192,106 @@ const FilterSection = (): JSX.Element => {
                   },
                 }}
               >
-                {range}
+                {"greater than >100"}
               </Typography>
-            ))}
-          </Box>
-        </FilterBox>
+            </Box>
+          </FilterBox>
+          <FilterBox heading="Experience">
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              borderRadius={"6px"}
+              gap={"10px"}
+              sx={{
+                "& :hover": {
+                  backgroundColor: theme.colorConstants.bgLightBlue,
+                },
+              }}
+            >
+              {uniqueJobExperience.map((exp, index) => (
+                <Typography
+                  key={index}
+                  padding={"8px"}
+                  onClick={() => handleExperienceClick(exp)}
+                  sx={{
+                    cursor: "pointer",
+                    color: theme.colorConstants.mediumGray,
+                    fontSize: "18px",
+                    fontWeight: "400",
+                    "& :hover": {
+                      backgroundColor: theme.colorConstants.bgLightBlue,
+                    },
+                  }}
+                >
+                  {exp}
+                </Typography>
+              ))}
+            </Box>
+          </FilterBox>
+          <FilterBox heading="Loaction">
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              borderRadius={"6px"}
+              gap={"10px"}
+              sx={{
+                "& :hover": {
+                  backgroundColor: theme.colorConstants.bgLightBlue,
+                },
+              }}
+            >
+              {uniqueJobLocations.map((location, index) => (
+                <Typography
+                  key={index}
+                  onClick={() => handleLocationClick(location)}
+                  padding={"8px"}
+                  sx={{
+                    cursor: "pointer",
+                    color: theme.colorConstants.mediumGray,
+                    fontSize: "18px",
+                    fontWeight: "400",
+                    "& :hover": {
+                      backgroundColor: theme.colorConstants.bgLightBlue,
+                    },
+                  }}
+                >
+                  {location}
+                </Typography>
+              ))}
+            </Box>
+          </FilterBox>
+          <FilterBox heading="Minimun Base Pay Salary">
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              borderRadius={"6px"}
+              gap={"10px"}
+              sx={{
+                "& :hover": {
+                  backgroundColor: theme.colorConstants.bgLightBlue,
+                },
+              }}
+            >
+              {ranges.map((range, index) => (
+                <Typography
+                  key={index}
+                  padding={"8px"}
+                  sx={{
+                    cursor: "pointer",
+                    color: theme.colorConstants.mediumGray,
+                    fontSize: "18px",
+                    fontWeight: "400",
+                    "& :hover": {
+                      backgroundColor: theme.colorConstants.bgLightBlue,
+                    },
+                  }}
+                >
+                  {range}
+                </Typography>
+              ))}
+            </Box>
+          </FilterBox>
+        </Box>
       </Box>
     </>
   );

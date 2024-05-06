@@ -8,10 +8,27 @@ import JobCard from "../../components/JobCard";
 
 const JobListSection = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
-  const state = useSelector((state: RootState) => state);
+
   React.useEffect(() => {
     void dispatch(fetchJobData());
   }, [dispatch]);
+  const state = useSelector((state: RootState) => state);
+  const filteredJobs = state?.jobs.data?.jdList.filter((job) => {
+    return state?.jobs.filters.every((filter) => {
+      switch (filter.type) {
+        case "role":
+          return job.jobRole === filter.value;
+        case "location":
+          return job.location === filter.value;
+        case "experience":
+          return job.minExp === filter.value;
+        case "salary":
+          return job.minJdSalary === filter.value;
+        default:
+          return false;
+      }
+    });
+  });
 
   if (state.jobs.isLoading) {
     return <>Real thing takes time to load...</>;
@@ -19,7 +36,7 @@ const JobListSection = (): JSX.Element => {
 
   return (
     <Box display={"flex"} flexWrap={"wrap"} gap={"40px"}>
-      {state.jobs.data?.jdList.map((item) => (
+      {filteredJobs?.map((item) => (
         <JobCard
           key={item.companyName}
           companyName={item.companyName}

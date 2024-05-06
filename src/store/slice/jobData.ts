@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import { PayloadAction } from "@reduxjs/toolkit";
 export const fetchJobData = createAsyncThunk("fetchJobData", async () => {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -25,14 +25,33 @@ export const fetchJobData = createAsyncThunk("fetchJobData", async () => {
   const data = await response.json();
   return data;
 });
-
+export interface JobFilter {
+  type: "role" | "location" | "experience" | "salary";
+  value: string | number;
+}
 const jobDataSlice = createSlice({
   name: "jobData",
   initialState: {
     isLoading: false,
     data: null,
+    filters: [] as JobFilter[],
   },
-  reducers: {},
+
+  reducers: {
+    setJobRolesFilter: (state, action: PayloadAction<JobFilter>) => {
+      state.filters.push(action.payload);
+    },
+    setExperienceFilter: (state, action: PayloadAction<JobFilter>) => {
+      state.filters.push(action.payload);
+    },
+    setLocationFilter: (state, action: PayloadAction<JobFilter>) => {
+      state.filters.push(action.payload);
+    },
+    setSalaryFilter: (state, action: PayloadAction<JobFilter>) => {
+      state.filters.push(action.payload);
+    },
+  },
+
   extraReducers: (builder) => {
     builder.addCase(fetchJobData.pending, (state) => {
       state.isLoading = true;
@@ -46,5 +65,11 @@ const jobDataSlice = createSlice({
     });
   },
 });
+export const {
+  setJobRolesFilter,
+  setExperienceFilter,
+  setLocationFilter,
+  setSalaryFilter,
+} = jobDataSlice.actions;
 
 export default jobDataSlice.reducer;
