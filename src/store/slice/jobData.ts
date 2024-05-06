@@ -50,6 +50,9 @@ const jobDataSlice = createSlice({
     setSalaryFilter: (state, action: PayloadAction<JobFilter>) => {
       state.filters.push(action.payload);
     },
+    clearFilters: (state) => {
+      state.filters = [];
+    },
   },
 
   extraReducers: (builder) => {
@@ -70,6 +73,7 @@ export const {
   setExperienceFilter,
   setLocationFilter,
   setSalaryFilter,
+  clearFilters,
 } = jobDataSlice.actions;
 
 export default jobDataSlice.reducer;

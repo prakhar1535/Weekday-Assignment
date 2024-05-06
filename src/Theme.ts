@@ -123,7 +123,7 @@ declare module "@mui/material/Typography" {
     button16: true;
   }
 }
-const softRed = "F15656";
+const softRed = "#F15656";
 const brown = "#333";
 const visibleGray = "#666666";
 const bgColorLightGray = "#786DB1";
@@ -186,7 +186,7 @@ const theme = createTheme({
   },
 
   typography: {
-    fontFamily: ["Inter", "switzer", "Montserrat"].join(","),
+    fontFamily: ["Poppins"].join(","),
     h1: {
       fontFamily: "Inter",
       fontWeight: 700,

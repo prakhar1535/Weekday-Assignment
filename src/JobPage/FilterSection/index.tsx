@@ -15,6 +15,7 @@ const FilterSection = (): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
   const state = useSelector((state: RootState) => state);
+
   useEffect(() => {
     void dispatch(fetchJobData());
   }, [dispatch]);
@@ -22,6 +23,7 @@ const FilterSection = (): JSX.Element => {
   if (state.jobs.isLoading) {
     return <>Real thing takes time to load...</>;
   }
+
   const uniqueJobRoles = Array.from(
     new Set(state.jobs.data?.jdList?.map((item) => item.jobRole))
   );
@@ -84,13 +86,14 @@ const FilterSection = (): JSX.Element => {
           display: "flex",
           flexDirection: "column",
           gap: "20px",
+          width: "100%",
         }}
       >
         <Box
           sx={{
             display: "flex",
             gap: "10px",
-            width: "100%",
+
             overflowX: { md: "unset", xs: "scroll" },
           }}
         >
