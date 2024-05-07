@@ -17,7 +17,7 @@ const FilterSection = (): JSX.Element => {
   const state = useSelector((state: RootState) => state);
 
   useEffect(() => {
-    void dispatch(fetchJobData());
+    void dispatch(fetchJobData({ limit: 10, offset: 0 }));
   }, [dispatch]);
 
   if (state.jobs.isLoading) {

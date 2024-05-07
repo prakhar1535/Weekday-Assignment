@@ -5,13 +5,19 @@ import { RootState } from "../../store";
 import { AppDispatch } from "../../store";
 import { fetchJobData } from "../../store/slice/jobData";
 import JobCard from "../../components/JobCard";
-
-const JobListSection = (): JSX.Element => {
+interface JobListSectionProps {
+  limit: number;
+  offset: number;
+}
+const JobListSection: React.FC<JobListSectionProps> = ({
+  limit,
+  offset,
+}): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
   React.useEffect(() => {
-    void dispatch(fetchJobData());
-  }, [dispatch]);
+    void dispatch(fetchJobData({ limit: limit, offset: offset }));
+  }, [dispatch, limit, offset]);
   const state = useSelector((state: RootState) => state);
   const filteredJobs = state?.jobs.data?.jdList.filter((job) => {
     return state?.jobs.filters.every((filter) => {
@@ -38,7 +44,7 @@ const JobListSection = (): JSX.Element => {
     <Box display={"flex"} flexWrap={"wrap"} gap={"40px"}>
       {filteredJobs?.map((item) => (
         <JobCard
-          key={item.companyName}
+          key={item.jdUid}
           companyName={item.companyName}
           companyLogo={item.logoUrl}
           role={item.jobRole}
@@ -48,6 +54,7 @@ const JobListSection = (): JSX.Element => {
           minsalary={item?.minJdSalary ?? 0}
           maxsalary={item?.maxJdSalary ?? 0}
           minExp={item.minExp}
+          pathTo={item.jdLink}
         />
       ))}
     </Box>

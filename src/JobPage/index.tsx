@@ -5,10 +5,12 @@ import theme from "../Theme";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { clearFilters } from "../store/slice/jobData";
+import IncreaseLimitButton from "../components/LoadMore";
 
 const JobPage = (): JSX.Element => {
   const filters = useSelector((state: RootState) => state.jobs.filters);
   const dispatch = useDispatch();
+  const { limit, offset } = useSelector((state: RootState) => state.jobs);
   return (
     <div>
       <Box
@@ -83,7 +85,16 @@ const JobPage = (): JSX.Element => {
           )}
         </Box>
         <Box marginTop={"40px"} overflow={"hidden"} width={"100%"}>
-          <JobListSection />
+          <JobListSection limit={limit} offset={offset} />
+        </Box>
+        <Box
+          marginTop={"40px"}
+          display={"flex"}
+          alignItems={"center"}
+          marginBottom={"80px"}
+          justifyContent={"center"}
+        >
+          <IncreaseLimitButton />
         </Box>
       </Box>
     </div>

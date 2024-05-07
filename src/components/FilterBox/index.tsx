@@ -62,7 +62,12 @@ const FilterBox: React.FC<Props> = ({ heading, children }): JSX.Element => {
             />
           </Box>
         </Box>
-        <Box display={openDrop ? "block" : "none"}>{children}</Box>
+        <Box
+          display={openDrop ? "block" : "none"}
+          onClick={() => setOpenDrop(false)}
+        >
+          {children}
+        </Box>
       </Box>
     </>
   );

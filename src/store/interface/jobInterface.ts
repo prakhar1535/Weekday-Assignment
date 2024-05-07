@@ -22,4 +22,6 @@ export interface JobState {
   };
   isLoading: boolean;
   filters: JobFilter[];
+  limit: number;
+  offset: number;
 }
