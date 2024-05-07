@@ -1,16 +1,33 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Typography } from "@mui/material";
+import React from "react";
 import FilterSection from "./FilterSection";
 import JobListSection from "./JobListSection";
 import theme from "../Theme";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
-import { clearFilters } from "../store/slice/jobData";
-import IncreaseLimitButton from "../components/LoadMore";
+import { clearFilters, increaseLimit } from "../store/slice/jobData";
+// import IncreaseLimitButton from "../components/LoadMore";
 
 const JobPage = (): JSX.Element => {
   const filters = useSelector((state: RootState) => state.jobs.filters);
   const dispatch = useDispatch();
   const { limit, offset } = useSelector((state: RootState) => state.jobs);
+  const handleScroll = () => {
+    console.log("Scroll event detected");
+    if (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight
+    ) {
+      console.log("Bottom of the page reached");
+      dispatch(increaseLimit());
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("scroll", handleScroll);
+    return () => document.removeEventListener("scroll", handleScroll);
+  }, [dispatch]);
   return (
     <div>
       <Box
@@ -87,7 +104,7 @@ const JobPage = (): JSX.Element => {
         <Box marginTop={"40px"} overflow={"hidden"} width={"100%"}>
           <JobListSection limit={limit} offset={offset} />
         </Box>
-        <Box
+        {/* <Box
           marginTop={"40px"}
           display={"flex"}
           alignItems={"center"}
@@ -95,7 +112,7 @@ const JobPage = (): JSX.Element => {
           justifyContent={"center"}
         >
           <IncreaseLimitButton />
-        </Box>
+        </Box> */}
       </Box>
     </div>
   );

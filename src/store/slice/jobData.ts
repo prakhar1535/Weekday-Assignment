@@ -67,6 +67,7 @@ const jobDataSlice = createSlice({
     },
     increaseLimit: (state) => {
       state.limit += 10;
+      console.log("limit", state.limit);
     },
   },
 
